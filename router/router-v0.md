@@ -33,3 +33,26 @@ IF skill.score < 0.5 AND skill.confidence > 0.6 → prioridad de ruta
 ## Teacher override
 
 La Maestra JJ siempre puede pisar la ruta (`teacher_override: true` en Mission). El sistema registra la decisión y aprende del resultado.
+
+---
+
+## Regla MVP determinística (canónica, del blueprint Gemini v2)
+
+La regla de arranque del router, escrita como matemática pura:
+
+```
+IF (LearnerProfile.phonology.linking_connected_speech.score < 0.4
+    AND LearnerProfile.phonology.linking_connected_speech.confidence > 0.8)
+THEN
+  route = [
+    1 → Ear Training   (mode: AUDITORY_DISCRIMINATION, accuracy >= 0.80)
+    2 → SoundMap        (mode: VISUAL_LINKING_MAP, interaction completed)
+    3 → Valerie AI      (mode: PRODUCTION_CHECK, intelligibility >= 0.75)
+  ]
+```
+
+Es la misma lógica v0 del Trainer (trackError → pestaña), expresada en el nuevo contrato. Un solo patrón de ejemplo basta para validar el loop; los demás umbrales se aprenden del piloto (N2).
+
+## Semántica del teacher override (contrato v2)
+
+`POST /api/v1/router/override` con `teacher_id`, `override_reason` y `pipeline_override`. La Mission sale con `teacher_override_active: true` y `active_until`. Regla pedagógica sellada: **el rendimiento bajo override SE SIGUE REGISTRANDO** — la Maestra JJ pisa la ruta, y el sistema aprende del resultado de su decisión.
