@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AttemptEvent",
+  "description": "Telemetría que regresa al core tras cada intento. Alimenta el perfil y dispara el re-ruteo.",
+  "type": "object",
+  "required": ["event_id", "student_id", "tool_id", "timestamp", "target_skill"],
+  "properties": {
+    "event_id": { "type": "string" },
+    "student_id": { "type": "string" },
+    "tool_id": { "type": "string" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "target_skill": { "type": "string" },
+    "assessment": {
+      "type": "object",
+      "properties": {
+        "attempts": { "type": "integer" },
+        "success_rate": { "type": "number" },
+        "score_delta": { "type": "number" },
+        "confidence_delta": { "type": "number" }
+      }
+    },
+    "error_telemetry": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "expected": { "type": "string" },
+          "produced": { "type": "string" },
+          "error_type": { "type": "string" },
+          "severity": { "type": "string", "enum": ["low", "medium", "high"] }
+        }
+      }
+    }
+  }
+}
