@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "LearnerProfile",
+  "description": "Expediente multidimensional del estudiante. CEFR es el mapa, no el camino. Cada skill: score (0-1) + confidence (0-1) que crece con datos.",
+  "type": "object",
+  "required": ["student_id", "created_at"],
+  "properties": {
+    "student_id": { "type": "string" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "cefr_aggregate": { "type": "string", "enum": ["A0", "A1", "A2", "B1", "B2", "C1", "C2"] },
+    "personality": {
+      "type": "object",
+      "description": "La persona antes que el pronóstico",
+      "properties": {
+        "dominant_channel": { "type": "string", "enum": ["oido", "ojo", "boca"] },
+        "modo_hugo": { "type": "boolean", "description": "Aprendizaje vicario: observar y escuchar YA es comunicar" },
+        "archetype": { "type": "string" }
+      }
+    },
+    "branches": {
+      "type": "object",
+      "properties": {
+        "phonetics": { "$ref": "#/$defs/skillNode" },
+        "phonology": { "$ref": "#/$defs/skillNode" },
+        "morphology": { "$ref": "#/$defs/skillNode" },
+        "syntax": { "$ref": "#/$defs/skillNode" },
+        "semantics_pragmatics": { "$ref": "#/$defs/skillNode" }
+      }
+    },
+    "macro_skills": {
+      "type": "object",
+      "properties": {
+        "listening": { "type": "number", "minimum": 0, "maximum": 1 },
+        "speaking_production": { "type": "number", "minimum": 0, "maximum": 1 },
+        "intelligibility": { "type": "number", "minimum": 0, "maximum": 1 },
+        "fluency_wpm": { "type": "number" }
+      }
+    }
+  },
+  "$defs": {
+    "skillNode": {
+      "type": "object",
+      "properties": {
+        "score": { "type": "number", "minimum": 0, "maximum": 1 },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "subskills": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/skillNode" }
+        }
+      }
+    }
+  }
+}
