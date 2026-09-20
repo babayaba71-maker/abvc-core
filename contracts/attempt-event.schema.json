@@ -1,20 +1,21 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "AttemptEvent",
-  "description": "Telemetría que regresa al core tras cada intento. Alimenta el perfil y dispara el re-ruteo.",
+  "description": "Telemetría que regresa al core tras cada intento. Alimenta el perfil, dispara recálculo de confidence y re-ruteo.",
   "type": "object",
   "required": ["event_id", "student_id", "tool_id", "timestamp", "target_skill"],
   "properties": {
     "event_id": { "type": "string" },
     "student_id": { "type": "string" },
-    "tool_id": { "type": "string" },
+    "source_tool_id": { "type": "string" },
+    "session_id": { "type": "string" },
     "timestamp": { "type": "string", "format": "date-time" },
     "target_skill": { "type": "string" },
     "assessment": {
       "type": "object",
       "properties": {
         "attempts": { "type": "integer" },
-        "success_rate": { "type": "number" },
+        "success_rate": { "type": "number", "minimum": 0, "maximum": 1 },
         "score_delta": { "type": "number" },
         "confidence_delta": { "type": "number" }
       }
@@ -23,11 +24,13 @@
       "type": "array",
       "items": {
         "type": "object",
+        "required": ["error_type"],
         "properties": {
-          "expected": { "type": "string" },
-          "produced": { "type": "string" },
-          "error_type": { "type": "string" },
-          "severity": { "type": "string", "enum": ["low", "medium", "high"] }
+          "phoneme_expected": { "type": "string" },
+          "phoneme_produced": { "type": "string" },
+          "error_type": { "type": "string", "description": "ej: missing_reduction, missing_linking, epenthesis" },
+          "severity": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+          "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
         }
       }
     }
