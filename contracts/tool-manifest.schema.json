@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ToolManifest",
+  "description": "Ficha técnica de una herramienta del ecosistema. El router descubre herramientas por sus capacidades, no por su nombre.",
+  "type": "object",
+  "required": ["tool_id", "name", "target_domains", "cefr_range"],
+  "properties": {
+    "tool_id": { "type": "string" },
+    "name": { "type": "string" },
+    "url": { "type": "string", "format": "uri" },
+    "target_domains": {
+      "type": "array",
+      "description": "Rutas de skill, ej: phonology.linking_connected_speech",
+      "items": { "type": "string" }
+    },
+    "cefr_range": { "type": "array", "items": { "type": "string" }, "minItems": 2, "maxItems": 2 },
+    "input_modalities": { "type": "array", "items": { "type": "string" } },
+    "requires_mic": { "type": "boolean" },
+    "tv_compatible": { "type": "boolean" },
+    "requires_valerie": { "type": "string", "enum": ["no", "optional", "required"] },
+    "language_policy": { "type": "string", "enum": ["es_100", "bilingual_bridge", "en_immersion"] },
+    "emits_attempt_events": { "type": "boolean" }
+  }
+}
