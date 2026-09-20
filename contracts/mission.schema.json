@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Mission",
+  "description": "La dosis del día: SECUENCIA de pasos con criterios de terminación. No es un lesson ID, es un pipeline.",
+  "type": "object",
+  "required": ["mission_id", "student_id", "steps"],
+  "properties": {
+    "mission_id": { "type": "string" },
+    "student_id": { "type": "string" },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "trigger_event": { "type": "string" },
+    "primary_target": { "type": "string", "description": "Skill path, ej: phonology.linking_connected_speech" },
+    "teacher_override": { "type": "boolean" },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["step", "tool_id"],
+        "properties": {
+          "step": { "type": "integer" },
+          "tool_id": { "type": "string" },
+          "mode": { "type": "string" },
+          "target": { "type": "string" },
+          "completion_criteria": {
+            "type": "object",
+            "properties": {
+              "accuracy_threshold": { "type": "number" },
+              "max_attempts": { "type": "integer" },
+              "interaction_completed": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    }
+  }
+}
