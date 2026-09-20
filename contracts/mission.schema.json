@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Mission",
-  "description": "La dosis del día: SECUENCIA de pasos con criterios de terminación. No es un lesson ID, es un pipeline.",
+  "description": "La dosis del día: SECUENCIA de pasos con configuración de objetivo y criterios de terminación. No es un lesson ID, es un pipeline.",
   "type": "object",
   "required": ["mission_id", "student_id", "steps"],
   "properties": {
@@ -9,24 +9,31 @@
     "student_id": { "type": "string" },
     "generated_at": { "type": "string", "format": "date-time" },
     "trigger_event": { "type": "string" },
-    "primary_target": { "type": "string", "description": "Skill path, ej: phonology.linking_connected_speech" },
-    "teacher_override": { "type": "boolean" },
+    "primary_target_skill": { "type": "string", "description": "Skill path, ej: phonology.linking_connected_speech" },
+    "secondary_target_skill": { "type": "string" },
+    "teacher_override_active": { "type": "boolean", "default": false },
+    "estimated_duration_minutes": { "type": "number" },
     "steps": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["step", "tool_id"],
+        "required": ["step_number", "tool_id"],
         "properties": {
-          "step": { "type": "integer" },
+          "step_number": { "type": "integer" },
           "tool_id": { "type": "string" },
-          "mode": { "type": "string" },
-          "target": { "type": "string" },
+          "mode": { "type": "string", "description": "ej: AUDITORY_DISCRIMINATION, VISUAL_LINKING_MAP, PRODUCTION_CHECK" },
+          "target_configuration": {
+            "type": "object",
+            "description": "Parámetros inyectados en la herramienta: phrase, phoneme_pairs, difficulty (0-1), highlight_reductions, evaluation_strictness...",
+            "additionalProperties": true
+          },
           "completion_criteria": {
             "type": "object",
             "properties": {
-              "accuracy_threshold": { "type": "number" },
+              "minimum_accuracy": { "type": "number", "minimum": 0, "maximum": 1 },
+              "intelligibility_threshold": { "type": "number", "minimum": 0, "maximum": 1 },
               "max_attempts": { "type": "integer" },
-              "interaction_completed": { "type": "boolean" }
+              "interactive_nodes_completed": { "type": "boolean" }
             }
           }
         }
